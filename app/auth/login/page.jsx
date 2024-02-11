@@ -115,7 +115,7 @@ const Login = () => {
                   </Grid>
                   <Grid item xs={12}>
                     <Divider style={{ marginTop: "15px" }}>
-                      Don't have an account?
+                      Do not have an account?
                     </Divider>
                   </Grid>
                   <Grid className="mb-4" item xs={12}>
