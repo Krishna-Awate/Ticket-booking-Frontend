@@ -77,7 +77,7 @@ const Navbar = () => {
               textDecoration: "none",
             }}
           >
-            <img
+            <Image
               src="/logo.jpg"
               style={{
                 borderRadius: "80px",
