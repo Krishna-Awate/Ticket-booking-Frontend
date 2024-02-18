@@ -7,7 +7,6 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     userUpdate: (state, action) => {
-      console.log("action", action.payload);
       state.isLoggedIn = action.payload;
       // Redux Toolkit allows us to write "mutating" logic in reducers. It
       // doesn't actually mutate the state because it uses the Immer library,

@@ -11,7 +11,6 @@ export default function Home() {
   //       method: "get",
   //     };
   //     const response = await axios(request);
-  //     console.log("response", response);
   //     const moviesData = [];
   //     moviesData.push(response.data);
   //     setMovies(moviesData);
@@ -19,7 +18,9 @@ export default function Home() {
   //   getMoviesData();
   // }, []);
 
-  console.log("movies", movies);
-
-  return <div>Hello</div>;
+  return (
+    <div className="text-2xl text-center font-bold text-gray-400 mt-32 ">
+      This site is under development. Please contact Admin.
+    </div>
+  );
 }

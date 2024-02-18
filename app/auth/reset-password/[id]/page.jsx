@@ -44,7 +44,6 @@ const ResetPassword = () => {
         onSubmit={async (values, actions) => {
           actions.resetForm();
           const user = await resetPassword(values, id);
-          console.log("user", user);
           if (user.status === "success") {
             Swal.fire({
               title: "Success",

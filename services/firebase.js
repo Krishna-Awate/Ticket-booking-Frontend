@@ -13,8 +13,6 @@ const firebaseConfig = {
   //   appId: "YOUR_APP_ID",
 };
 
-console.log("firebase", firebase);
-
 if (!firebase?.apps?.length) {
   firebase.initializeApp(firebaseConfig);
 }

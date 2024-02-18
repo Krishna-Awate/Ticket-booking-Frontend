@@ -11,6 +11,7 @@ import { Input } from "@mui/joy";
 import { makeStyles } from "@mui/styles";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
+import ButtonWithLoader from "/components/Button/ButtonWithLoader";
 import { forgotPassword } from "../../../services/user";
 
 const useStyles = makeStyles((theme) => ({
@@ -23,6 +24,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ForgotPassword = () => {
+  const [isButtonLoading, setisButtonLoading] = useState(false);
+
   const classes = useStyles();
 
   const SignupSchema = Yup.object().shape({
@@ -36,11 +39,13 @@ const ForgotPassword = () => {
         validationSchema={SignupSchema}
         onSubmit={async (values, actions) => {
           actions.resetForm();
+          setisButtonLoading(true);
           const user = await forgotPassword({
             ...values,
             host: window.location.host,
             protocol: window.location.protocol,
           });
+          setisButtonLoading(false);
           if (user.status === "success") {
             Swal.fire({
               title: "Success",
@@ -92,16 +97,11 @@ const ForgotPassword = () => {
                   </Grid>
 
                   <Grid className="mt-4" item xs={12}>
-                    <Button
-                      className={classes.button}
-                      style={{ backgroundColor: "#228B22" }}
-                      type="submit"
-                      variant="contained"
-                      color="success"
-                      fullWidth
-                    >
-                      Send
-                    </Button>
+                    <ButtonWithLoader
+                      isButtonLoading={isButtonLoading}
+                      buttonColor="green"
+                      text="send"
+                    />
                   </Grid>
                   <Grid className="text-center pb-4" item xs={12}>
                     <Link

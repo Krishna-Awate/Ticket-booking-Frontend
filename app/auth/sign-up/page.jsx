@@ -4,12 +4,15 @@ import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import PhoneInput from "react-phone-number-input";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 // Material UI imports
 import { Paper, Grid, Button } from "@mui/material";
 import Input from "@mui/joy/Input";
 import { makeStyles } from "@mui/styles";
+const Swal = require("sweetalert2");
 
+import ButtonWithLoader from "/components/Button/ButtonWithLoader";
 import { userSignUp } from "/services/user";
 
 const useStyles = makeStyles((theme) => ({
@@ -21,7 +24,9 @@ const useStyles = makeStyles((theme) => ({
 
 const SignUp = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [isButtonLoading, setIsButtonLoading] = useState(false);
   const classes = useStyles();
+  const router = useRouter();
 
   const phoneRegExp =
     /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
@@ -56,9 +61,18 @@ const SignUp = () => {
         }}
         validationSchema={SignupSchema}
         onSubmit={async (values, actions) => {
+          setIsButtonLoading(true);
           const newUserData = await userSignUp(values);
-          console.log("newUserData", newUserData);
+          setIsButtonLoading(false);
           actions.resetForm();
+          if (newUserData.status === "success") {
+            Swal.fire({
+              title: "Success",
+              text: "Your account has been created successfully. Please login with your email and password",
+              icon: "success",
+            });
+            router.push("/auth/login");
+          }
         }}
       >
         {({ values, handleChange, handleBlur }) => (
@@ -181,15 +195,11 @@ const SignUp = () => {
                     </div>
                   </Grid>
                   <Grid className="mt-2" item xs={12}>
-                    <Button
-                      className={classes.button}
-                      type=""
-                      variant="contained"
-                      color="primary"
-                      fullWidth
-                    >
-                      Continue
-                    </Button>
+                    <ButtonWithLoader
+                      isButtonLoading={isButtonLoading}
+                      text="Continue"
+                      buttonColor="blue"
+                    />
                   </Grid>
                   <Grid className="text-sm" item xs={12}>
                     By creating an account, you agree to Conditions of Use and

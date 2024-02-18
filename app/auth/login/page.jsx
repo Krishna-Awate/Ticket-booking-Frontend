@@ -4,14 +4,17 @@ import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 const Swal = require("sweetalert2");
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 // Material UI imports
 import { Paper, Grid, Button } from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
 import { Input, Divider } from "@mui/joy";
-
 import { makeStyles } from "@mui/styles";
 
 import { userSignIn } from "../../../services/user";
+import ButtonWithLoader from "/components/Button/ButtonWithLoader";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -21,8 +24,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Login = () => {
-  const classes = useStyles();
+  const [isButtonLoading, setisButtonLoading] = useState(false);
 
+  const classes = useStyles();
+  const router = useRouter();
   const SignupSchema = Yup.object().shape({
     email: Yup.string().email("Enter valid email").required("Enter your email"),
     password: Yup.string().required("Enter password"),
@@ -34,10 +39,15 @@ const Login = () => {
         initialValues={{ email: "", password: "" }}
         validationSchema={SignupSchema}
         onSubmit={async (values, actions) => {
+          setisButtonLoading(true);
           actions.resetForm();
           const user = await userSignIn(values);
+          setisButtonLoading(false);
+          if (user.status === "success") {
+            router.push("/");
+          }
+          console.log("Cookies", Cookies.get("jwt"));
           // localStorage.setItem("user", JSON.stringify(token));
-          console.log("user", user);
         }}
       >
         {({ values, handleChange, handleBlur }) => (
@@ -95,15 +105,11 @@ const Login = () => {
                   </Grid>
 
                   <Grid className="mt-2" item xs={12}>
-                    <Button
-                      className={classes.button}
-                      type=""
-                      variant="contained"
-                      color="primary"
-                      fullWidth
-                    >
-                      Log in
-                    </Button>
+                    <ButtonWithLoader
+                      isButtonLoading={isButtonLoading}
+                      text="Log in"
+                      buttonColor="blue"
+                    />
                   </Grid>
                   <Grid className="text-center text-sm" item xs={12}>
                     <Link
@@ -120,16 +126,10 @@ const Login = () => {
                   </Grid>
                   <Grid className="mb-4" item xs={12}>
                     <Link href="/auth/sign-up">
-                      <Button
-                        className={classes.button}
-                        style={{ backgroundColor: "#228B22" }}
-                        type=""
-                        variant="contained"
-                        color="success"
-                        fullWidth
-                      >
-                        Create your account
-                      </Button>
+                      <ButtonWithLoader
+                        text="create your account"
+                        buttonColor="green"
+                      />
                     </Link>
                   </Grid>
                 </Grid>

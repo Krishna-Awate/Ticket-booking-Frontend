@@ -30,7 +30,6 @@ export const userSignIn = async (userData) => {
     };
     const response = await axios(request);
     const user = response.data;
-    console.log("user", user);
     return user;
   } catch (e) {
     Swal.fire({
