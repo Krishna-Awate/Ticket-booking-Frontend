@@ -40,8 +40,8 @@ const Login = () => {
         validationSchema={SignupSchema}
         onSubmit={async (values, actions) => {
           setisButtonLoading(true);
-          actions.resetForm();
           const user = await userSignIn(values);
+          actions.resetForm();
           setisButtonLoading(false);
           if (user.status === "success") {
             router.push("/");
