@@ -38,7 +38,6 @@ const ForgotPassword = () => {
         initialValues={{ email: "" }}
         validationSchema={SignupSchema}
         onSubmit={async (values, actions) => {
-          actions.resetForm();
           setisButtonLoading(true);
           const user = await forgotPassword({
             ...values,
@@ -46,6 +45,7 @@ const ForgotPassword = () => {
             protocol: window.location.protocol,
           });
           setisButtonLoading(false);
+          actions.resetForm();
           if (user.status === "success") {
             Swal.fire({
               title: "Success",

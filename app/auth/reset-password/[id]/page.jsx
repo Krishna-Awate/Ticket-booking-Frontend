@@ -42,8 +42,8 @@ const ResetPassword = () => {
         initialValues={{ password: "", re_password: "" }}
         validationSchema={SignupSchema}
         onSubmit={async (values, actions) => {
-          actions.resetForm();
           const user = await resetPassword(values, id);
+          actions.resetForm();
           if (user.status === "success") {
             Swal.fire({
               title: "Success",

@@ -41,8 +41,8 @@ const Login = () => {
         onSubmit={async (values, actions) => {
           setisButtonLoading(true);
           const user = await userSignIn(values);
-          actions.resetForm();
           setisButtonLoading(false);
+          actions.resetForm();
           if (user.status === "success") {
             router.push("/");
           }
