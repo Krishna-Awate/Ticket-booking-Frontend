@@ -12,6 +12,7 @@ import { Input } from "@mui/joy";
 import { makeStyles } from "@mui/styles";
 
 import { resetPassword } from "/services/user";
+import ButtonWithLoader from "/components/Button/ButtonWithLoader";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -23,6 +24,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ResetPassword = () => {
+  const [isButtonLoading, setisButtonLoading] = useState(false);
+
   const router = useRouter();
   const classes = useStyles();
   const { id } = useParams();
@@ -42,7 +45,9 @@ const ResetPassword = () => {
         initialValues={{ password: "", re_password: "" }}
         validationSchema={SignupSchema}
         onSubmit={async (values, actions) => {
+          setisButtonLoading(true);
           const user = await resetPassword(values, id);
+          setisButtonLoading(false);
           actions.resetForm();
           if (user.status === "success") {
             Swal.fire({
@@ -115,16 +120,11 @@ const ResetPassword = () => {
                   </Grid>
 
                   <Grid className="mt-4 mb-4 pb-6" item xs={12}>
-                    <Button
-                      className={classes.button}
-                      style={{ backgroundColor: "#228B22" }}
-                      type="submit"
-                      variant="contained"
-                      color="success"
-                      fullWidth
-                    >
-                      Reset Password
-                    </Button>
+                    <ButtonWithLoader
+                      isButtonLoading={isButtonLoading}
+                      text="Reset Password"
+                      buttonColor="green"
+                    />
                   </Grid>
                 </Grid>
               </Form>
