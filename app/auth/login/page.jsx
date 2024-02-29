@@ -35,12 +35,10 @@ const Login = () => {
     password: Yup.string().required("Enter password"),
   });
 
-  console.log("here user", user);
-
   return (
     <>
       {user && !user?.is_email_verified ? (
-        <VerificationEmail />
+        <VerificationEmail email={user.email} />
       ) : (
         <Formik
           initialValues={{ email: "", password: "" }}

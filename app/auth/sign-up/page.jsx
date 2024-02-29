@@ -54,7 +54,7 @@ const SignUp = () => {
   return (
     <>
       {user && !user?.is_email_verified ? (
-        <VerificationEmail />
+        <VerificationEmail email={user.email} />
       ) : (
         <Formik
           initialValues={{

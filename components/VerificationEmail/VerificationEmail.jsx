@@ -4,11 +4,11 @@ import React from "react";
 import { Paper, Grid } from "@mui/material";
 import EmailIcon from "@mui/icons-material/Email";
 
-const VerificationEmail = () => {
+const VerificationEmail = ({ email }) => {
   return (
     <div>
       <div className="full flex items-center justify-center p-4 mt-20">
-        <Paper className="w-full md:w-2/6 p-6 bg-slate-100" elevation={3}>
+        <Paper className="w-full md:w-auto p-6 bg-slate-100" elevation={3}>
           <div className="flex justify-center mb-4">
             <EmailIcon style={{ fontSize: 50, color: "#0063b0" }} />
           </div>
@@ -16,7 +16,7 @@ const VerificationEmail = () => {
             Verify Email
           </div>
           <div className="flex justify-center mb-6 font-sans">
-            A verification email has been sent to email address.
+            A verification email has been sent to email address {email}.
           </div>
           <div className="flex justify-center font-sans mb-4">
             Click the link in the email to verify your account
