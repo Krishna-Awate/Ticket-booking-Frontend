@@ -20,11 +20,10 @@ export const userSignUp = async (userData) => {
     return;
   }
 };
-console.log("");
 export const userSignIn = async (userData) => {
   try {
     const request = {
-      url: `${process.env.NEXT_PUBLIC_BACKEND_HOST}/user/signin`,
+      url: `${process.env.NEXT_PUBLIC_BACKEND_HOST}/user/login`,
       method: "post",
       data: userData,
     };
@@ -67,6 +66,25 @@ export const resetPassword = async (userData, token) => {
       url: `${process.env.NEXT_PUBLIC_BACKEND_HOST}/user/resetPassword/${token}`,
       method: "post",
       data: userData,
+    };
+    const response = await axios(request);
+    const user = response.data;
+    return user;
+  } catch (e) {
+    Swal.fire({
+      title: "Error!",
+      text: e.response.data.message,
+      icon: "error",
+    });
+    return;
+  }
+};
+
+export const emailVerify = async (token) => {
+  try {
+    const request = {
+      url: `${process.env.NEXT_PUBLIC_BACKEND_HOST}/user/emailVerify/${token}`,
+      method: "post",
     };
     const response = await axios(request);
     const user = response.data;
