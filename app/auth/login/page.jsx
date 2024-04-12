@@ -47,7 +47,7 @@ const Login = () => {
             setisButtonLoading(true);
             const user = await userSignIn(values);
             setisButtonLoading(false);
-            actions.resetForm();
+            // actions.resetForm();
             if (user.status === "success") {
               setUser(user?.data?.user);
               if (user?.data?.user?.is_email_verified) {

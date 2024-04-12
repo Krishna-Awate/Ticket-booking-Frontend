@@ -8,13 +8,15 @@ import { useRouter } from "next/navigation";
 
 // Material UI imports
 import { Paper, Grid } from "@mui/material";
-import Input from "@mui/joy/Input";
 import { makeStyles } from "@mui/styles";
 const Swal = require("sweetalert2");
 
 import ButtonWithLoader from "/components/Button/ButtonWithLoader";
 import VerificationEmail from "/components/VerificationEmail/VerificationEmail";
 import { userSignUp } from "/services/user";
+
+//Component
+import CustomInput from "/components/Input/CustomInput";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -79,150 +81,80 @@ const SignUp = () => {
             }
           }}
         >
-          {({ values, handleChange, handleBlur }) => (
-            <div className="full flex items-center justify-center p-4">
-              <Paper className="w-full md:w-1/4 p-6 bg-slate-100" elevation={3}>
-                <Form>
-                  <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                      <div className="text-2xl font-semibold mb-4">
-                        Create Account
-                      </div>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <label className="block uppercase text-gray-500 text-xs font-bold mb-2">
-                        Your name
-                      </label>
-                      <div>
-                        <Input
-                          name="name"
-                          variant="outlined"
-                          placeholder="First and Last name"
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.name}
-                        />
-                      </div>
-                      <ErrorMessage
-                        className="text-sm ml-1 mt-1"
-                        style={{ color: "red" }}
-                        name="name"
-                        component="div"
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <label className="block uppercase text-gray-500 text-xs font-bold mb-2">
-                        Email
-                      </label>
-                      <div>
-                        <Input
-                          name="email"
-                          placeholder="Email address"
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.email}
-                        />
-                      </div>
-                      <ErrorMessage
-                        className="text-sm ml-1 mt-1"
-                        style={{ color: "red" }}
-                        name="email"
-                        component="div"
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <label className="block uppercase text-gray-500 text-xs font-bold mb-2">
-                        Mobile number
-                      </label>
-                      <div>
-                        {/* <PhoneInput
-                      style={{ width: "20px" }}
-                      placeholder="Enter phone number"
-                      value={phoneNumber}
-                      onChange={setPhoneNumber}
-                    /> */}
-                        <Input
-                          name="phone"
-                          placeholder="Mobile number"
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.phone}
-                        />
-                        <ErrorMessage
-                          className="text-sm ml-1 mt-1"
-                          style={{ color: "red" }}
-                          name="phone"
-                          component="div"
-                        />
-                      </div>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <label className="block uppercase text-gray-500 text-xs font-bold mb-2">
-                        Password
-                      </label>
-                      <div>
-                        <Input
-                          placeholder="Password"
-                          type="password"
-                          name="password"
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.password}
-                        />
-                        <ErrorMessage
-                          className="text-sm ml-1 mt-1"
-                          style={{ color: "red" }}
-                          name="password"
-                          component="div"
-                        />
-                      </div>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <label className="block uppercase text-gray-500 text-xs font-bold mb-2">
-                        Re-enter password
-                      </label>
-                      <div>
-                        <Input
-                          placeholder="Re-enter password"
-                          type="password"
-                          name="re_password"
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.re_password}
-                        />
-                        <ErrorMessage
-                          className="text-sm ml-1 mt-1"
-                          style={{ color: "red" }}
-                          name="re_password"
-                          component="div"
-                        />
-                      </div>
-                    </Grid>
-                    <Grid className="mt-2" item xs={12}>
-                      <ButtonWithLoader
-                        isButtonLoading={isButtonLoading}
-                        text="Continue"
-                        buttonColor="blue"
-                      />
-                    </Grid>
-                    <Grid className="text-sm" item xs={12}>
-                      By creating an account, you agree to Conditions of Use and
-                      Privacy Notice.
-                    </Grid>
-                    <Grid className="text-sm" item xs={12}>
-                      Already have an account?
-                      <Link
-                        style={{ color: "blue", cursor: "pointer" }}
-                        href="/auth/login"
-                      >
-                        Sign in
-                      </Link>
-                    </Grid>
+          <div className="full flex items-center justify-center p-4">
+            <Paper className="w-full md:w-1/4 p-6 bg-slate-100" elevation={3}>
+              <Form>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <div className="text-2xl font-semibold mb-4">
+                      Create Account
+                    </div>
                   </Grid>
-                </Form>
-              </Paper>
-            </div>
-          )}
+                  <Grid item xs={12}>
+                    <CustomInput
+                      name="name"
+                      type="text"
+                      label="Your Name"
+                      placeholder="First and Last Name"
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <CustomInput
+                      name="email"
+                      type="email"
+                      label="Email"
+                      placeholder="Email"
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <CustomInput
+                      name="phone"
+                      type="text"
+                      label="Mobile number"
+                      placeholder="Mobile number"
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <CustomInput
+                      name="password"
+                      type="password"
+                      label="Password"
+                      placeholder="password"
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <CustomInput
+                      name="re_password"
+                      type="password"
+                      label="Re-enter password"
+                      placeholder="Re-enter password"
+                    />
+                  </Grid>
+
+                  <Grid className="mt-2" item xs={12}>
+                    <ButtonWithLoader
+                      isButtonLoading={isButtonLoading}
+                      text="Continue"
+                      buttonColor="blue"
+                    />
+                  </Grid>
+                  <Grid className="text-sm" item xs={12}>
+                    By creating an account, you agree to Conditions of Use and
+                    Privacy Notice.
+                  </Grid>
+                  <Grid className="text-sm" item xs={12}>
+                    Already have an account?
+                    <Link
+                      style={{ color: "blue", cursor: "pointer" }}
+                      href="/auth/login"
+                    >
+                      Sign in
+                    </Link>
+                  </Grid>
+                </Grid>
+              </Form>
+            </Paper>
+          </div>
         </Formik>
       )}
     </>
