@@ -18,6 +18,8 @@ import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
 import { userUpdate } from "@/src/slice/userSlice";
 import { useRouter } from "next/navigation";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle"; // Profile icon
+import LogoutIcon from "@mui/icons-material/Logout"; // Logout icon
 
 const pages = ["Products", "Upload", "About Us", "Contact Us"];
 const settings = ["Profile", "Logout"];
@@ -221,7 +223,12 @@ const Navbar = () => {
                   <MenuItem
                     key={setting}
                     onClick={() => handleCloseUserMenu(i)}
+                    sx={{ display: "flex", alignItems: "center" }}
                   >
+                    {setting === "Profile" && (
+                      <AccountCircleIcon sx={{ mr: 2 }} />
+                    )}
+                    {setting === "Logout" && <LogoutIcon sx={{ mr: 2 }} />}
                     <Typography textAlign="center">{setting}</Typography>
                   </MenuItem>
                 ))}
