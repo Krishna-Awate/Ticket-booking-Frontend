@@ -1,10 +1,25 @@
 "use client";
+import { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import * as XLSX from "xlsx";
 import axios from "axios";
 const Swal = require("sweetalert2");
+import { useRouter } from "next/navigation";
 
 const FileUpload = () => {
+  const router = useRouter();
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      Swal.fire({
+        title: "Error!",
+        text: "You are not logged in. Please login to with your credentials.",
+        icon: "error",
+      });
+      router.push("/auth/login");
+    }
+  }, []);
+
   const { getRootProps, getInputProps } = useDropzone({
     accept: ".xlsx, .xls",
     onDrop: (acceptedFiles) => handleFileUpload(acceptedFiles),

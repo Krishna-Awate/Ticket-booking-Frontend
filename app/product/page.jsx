@@ -1,4 +1,5 @@
 "use client";
+import { useEffect, useState } from "react";
 import * as React from "react";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -8,6 +9,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
+import { useRouter } from "next/navigation";
+const Swal = require("sweetalert2");
 
 const columns = [
   { id: "name", label: "Name", minWidth: 170 },
@@ -59,8 +62,22 @@ const rows = [
 ];
 
 export default function StickyHeadTable() {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      Swal.fire({
+        title: "Error!",
+        text: "You are not logged in. Please login to with your credentials.",
+        icon: "error",
+      });
+      router.push("/auth/login");
+    }
+  }, []);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);

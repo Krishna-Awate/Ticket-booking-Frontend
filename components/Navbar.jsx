@@ -133,11 +133,15 @@ const Navbar = () => {
                 display: { xs: "block", md: "none" },
               }}
             >
-              {pages.map((page, i) => (
-                <MenuItem key={page} onClick={() => handleCloseNavMenu(i)}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
+              {pages.map(
+                (page, i) =>
+                  (isUserLoggedIn ||
+                    !["Products", "Upload"].includes(page)) && (
+                    <MenuItem key={page} onClick={() => handleCloseNavMenu(i)}>
+                      <Typography textAlign="center">{page}</Typography>
+                    </MenuItem>
+                  )
+              )}
             </Menu>
           </Box>
           {/* <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} /> */}
@@ -160,15 +164,18 @@ const Navbar = () => {
             KRISHNA
           </Typography> */}
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page, i) => (
-              <Button
-                key={page}
-                onClick={() => handleCloseNavMenu(i)}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                {page}
-              </Button>
-            ))}
+            {pages.map(
+              (page, i) =>
+                (isUserLoggedIn || !["Products", "Upload"].includes(page)) && (
+                  <Button
+                    key={page}
+                    onClick={() => handleCloseNavMenu(i)}
+                    sx={{ my: 2, color: "white", display: "block" }}
+                  >
+                    {page}
+                  </Button>
+                )
+            )}
           </Box>
 
           {isUserLoggedIn && (
