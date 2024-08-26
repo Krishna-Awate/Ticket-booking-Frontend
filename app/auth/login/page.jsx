@@ -1,11 +1,13 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 const Swal = require("sweetalert2");
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import { useDispatch, useSelector } from "react-redux";
+import { userUpdate } from "/src/slice/userSlice";
 
 // Material UI imports
 import { Paper, Grid, Button } from "@mui/material";
@@ -30,10 +32,23 @@ const Login = () => {
 
   const classes = useStyles();
   const router = useRouter();
+  const dispatch = useDispatch();
+
   const SignupSchema = Yup.object().shape({
     email: Yup.string().email("Enter valid email").required("Enter your email"),
     password: Yup.string().required("Enter password"),
   });
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      router.push("/");
+    }
+  }, []);
+
+  const handleLogin = () => {
+    dispatch(userUpdate(true));
+  };
 
   return (
     <>
@@ -47,10 +62,12 @@ const Login = () => {
             setisButtonLoading(true);
             const user = await userSignIn(values);
             setisButtonLoading(false);
-            // actions.resetForm();
             if (user.status === "success") {
               setUser(user?.data?.user);
               if (user?.data?.user?.is_email_verified) {
+                localStorage.setItem("token", user?.token);
+                localStorage.setItem("user", JSON.stringify(user?.data?.user));
+                handleLogin();
                 router.push("/");
               }
             }

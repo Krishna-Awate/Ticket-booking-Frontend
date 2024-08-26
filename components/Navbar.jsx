@@ -19,22 +19,30 @@ import { useSelector, useDispatch } from "react-redux";
 import { userUpdate } from "@/src/slice/userSlice";
 import { useRouter } from "next/navigation";
 
-const pages = ["Products", "About Us", "Contact Us"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const pages = ["Products", "Upload", "About Us", "Contact Us"];
+const settings = ["Profile", "Logout"];
 
 const Navbar = () => {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+  const [user, setUser] = useState();
+
   const dispatch = useDispatch();
-  // const checkLoggedIn = useSelector((state) => state?.user?.isLoggedIn);
+  const router = useRouter();
+  const checkLoggedIn = useSelector((state) => state?.user?.isLoggedIn);
+  console.log("checkLoggedIn", checkLoggedIn);
 
   useEffect(() => {
-    const userData = JSON.parse(localStorage.getItem("token"));
-    if (userData) {
+    const token = localStorage.getItem("token");
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (token) {
       setIsUserLoggedIn(true);
+      setUser(user);
+    } else {
+      console.log("Something went wrong");
     }
-  }, [isUserLoggedIn]);
+  }, [checkLoggedIn]);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -43,16 +51,24 @@ const Navbar = () => {
     setAnchorElUser(event.currentTarget);
   };
 
-  const handleCloseNavMenu = () => {
+  const handleCloseNavMenu = (i) => {
     setAnchorElNav(null);
+    if (pages[i] === "Upload") {
+      router.push("/admin/upload");
+    } else if (pages[i] === "Products") {
+      router.push("/product");
+    }
   };
 
   const handleCloseUserMenu = (i) => {
     setAnchorElUser(null);
     if (settings[i] === "Logout") {
-      localStorage.removeItem("user");
+      localStorage.removeItem("token");
       setIsUserLoggedIn("");
       dispatch(userUpdate(false));
+      router.push("/auth/login");
+    } else if (settings[i] === "Profile") {
+      router.push("/profile");
     }
   };
 
@@ -60,8 +76,6 @@ const Navbar = () => {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          {/* <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} /> */}
-
           <Typography
             variant="h6"
             noWrap
@@ -88,7 +102,7 @@ const Navbar = () => {
               width={50}
               alt="Logo"
             />
-            <div style={{ marginTop: "4px" }}>KRISHNA</div>
+            {/* <div style={{ marginTop: "4px" }}>KRISHNA</div> */}
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
@@ -119,15 +133,15 @@ const Navbar = () => {
                 display: { xs: "block", md: "none" },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+              {pages.map((page, i) => (
+                <MenuItem key={page} onClick={() => handleCloseNavMenu(i)}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
-          <Typography
+          {/* <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} /> */}
+          {/* <Typography
             variant="h5"
             noWrap
             component="a"
@@ -144,12 +158,12 @@ const Navbar = () => {
             }}
           >
             KRISHNA
-          </Typography>
+          </Typography> */}
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
+            {pages.map((page, i) => (
               <Button
                 key={page}
-                onClick={handleCloseNavMenu}
+                onClick={() => handleCloseNavMenu(i)}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
                 {page}
@@ -160,8 +174,24 @@ const Navbar = () => {
           {isUserLoggedIn && (
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/3.jpg" />
+                <IconButton
+                  onClick={handleOpenUserMenu}
+                  sx={{
+                    paddingRight: "40px",
+                    width: 24,
+                    height: 20,
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    color: "white",
+                  }}
+                >
+                  {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/3.jpg" /> */}
+                  <MenuItem>
+                    <Typography textAlign="center" sx={{ fontSize: "20px" }}>
+                      {user.name.split(" ")[0]}
+                    </Typography>
+                  </MenuItem>
                 </IconButton>
               </Tooltip>
               <Menu
