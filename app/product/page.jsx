@@ -92,7 +92,7 @@ export default function StickyHeadTable() {
     <div className="flex justify-center items-center mt-20">
       <Paper
         sx={{
-          width: "98%",
+          width: "95%",
           overflow: "hidden",
           border: "1px solid #d1cdcd",
         }}
