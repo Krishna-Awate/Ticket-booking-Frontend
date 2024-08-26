@@ -41,8 +41,6 @@ const Navbar = () => {
     if (token) {
       setIsUserLoggedIn(true);
       setUser(user);
-    } else {
-      console.log("Something went wrong");
     }
   }, [checkLoggedIn]);
 
@@ -66,6 +64,7 @@ const Navbar = () => {
     setAnchorElUser(null);
     if (settings[i] === "Logout") {
       localStorage.removeItem("token");
+      localStorage.removeItem("user");
       setIsUserLoggedIn("");
       dispatch(userUpdate(false));
       router.push("/auth/login");

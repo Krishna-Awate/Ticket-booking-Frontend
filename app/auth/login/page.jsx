@@ -6,7 +6,7 @@ const Swal = require("sweetalert2");
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { userUpdate } from "/src/slice/userSlice";
 
 // Material UI imports
