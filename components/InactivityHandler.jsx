@@ -20,7 +20,7 @@ const InactivityHandler = ({ timeout = 300000 }) => {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
         dispatch(userRoleUpdate(""));
-        router.push("/auth/logout");
+        router.push("/auth/login");
       }, timeout);
     };
 
