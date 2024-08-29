@@ -16,7 +16,7 @@ const WhatsAppShareButton = ({ message }) => {
       style={{ color: "#25D366" }}
     >
       <div className="text-xs font-semibold flex items-center justify-center">
-        <WhatsAppIcon /> <span className="ml-1">Share on What'sapp</span>
+        <WhatsAppIcon /> <span className="ml-1">Share on Whatsapp</span>
       </div>
     </IconButton>
   );
