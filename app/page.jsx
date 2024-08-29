@@ -103,7 +103,7 @@ export default function Home() {
                             </span>
                           </div>
                           <div>
-                            <WhatsAppShareButton />
+                            <WhatsAppShareButton message={"Hello"} />
                           </div>
                           <div className="space-y-1 md:space-x-2 md:flex mt-2 md:justify-center">
                             <div className="bg-cyan-400 px-1 py-2 rounded-sm font-semibold flex items-center justify-center">
