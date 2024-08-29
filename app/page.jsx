@@ -48,9 +48,6 @@ export default function Home() {
       });
       router.push("/auth/login");
     }
-  }, []);
-
-  useEffect(() => {
     const getBazars = async () => {
       const bazar = await getBazarData();
       setDayBazar(bazar?.data?.day);

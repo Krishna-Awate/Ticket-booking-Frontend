@@ -20,29 +20,62 @@ import { userUpdate } from "@/src/slice/userSlice";
 import { useRouter } from "next/navigation";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle"; // Profile icon
 import LogoutIcon from "@mui/icons-material/Logout"; // Logout icon
+const Swal = require("sweetalert2");
 
-const pages = ["Products", "Upload", "About Us", "Contact Us"];
-const settings = ["Profile", "Logout"];
+import { userRoleUpdate } from "/src/slice/userSlice";
+
+//API
+import { getUser } from "/services/user";
 
 const Navbar = () => {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
   const [user, setUser] = useState();
+  // const [userRole, setUserRole] = useState("");
 
   const dispatch = useDispatch();
   const router = useRouter();
   const checkLoggedIn = useSelector((state) => state?.user?.isLoggedIn);
-  console.log("checkLoggedIn", checkLoggedIn);
+  const userRole = useSelector((state) => state?.user?.userRole);
+
+  const pages = [
+    "Home",
+    "Products",
+    "Contact Us",
+    ...(userRole === "admin" ? ["Admin"] : []),
+  ];
+  const settings = ["Profile", "Logout"];
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     const user = JSON.parse(localStorage.getItem("user"));
-    if (token) {
-      setIsUserLoggedIn(true);
-      setUser(user);
+    if (!token) {
+      // Swal.fire({
+      //   title: "Error!",
+      //   text: "You are not logged in. Please login to with your credentials.",
+      //   icon: "error",
+      // });
+      // router.push("/auth/login");
+    } else {
+      const getUserData = async () => {
+        const token = localStorage.getItem("token");
+        const userData = await getUser(token);
+        setIsUserLoggedIn(true);
+        setUser(user);
+        dispatch(userRoleUpdate(userData?.user?.role));
+        if (!userData) {
+          setIsUserLoggedIn(false);
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+          router.push("/auth/login");
+        }
+      };
+      getUserData();
     }
   }, [checkLoggedIn]);
+
+  console.log("here running");
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -53,10 +86,21 @@ const Navbar = () => {
 
   const handleCloseNavMenu = (i) => {
     setAnchorElNav(null);
-    if (pages[i] === "Upload") {
-      router.push("/admin/upload");
-    } else if (pages[i] === "Products") {
-      router.push("/product");
+    switch (i) {
+      case 0:
+        router.push("/");
+        break;
+      case 1:
+        router.push("/product");
+        break;
+      case 2:
+        router.push("/contact");
+        break;
+      case 3:
+        router.push("/admin");
+        break;
+      default:
+        break;
     }
   };
 
@@ -65,8 +109,10 @@ const Navbar = () => {
     if (settings[i] === "Logout") {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
+      userRoleUpdate("");
       setIsUserLoggedIn("");
       dispatch(userUpdate(false));
+      dispatch(userRoleUpdate(""));
       router.push("/auth/login");
     } else if (settings[i] === "Profile") {
       router.push("/profile");
@@ -74,10 +120,10 @@ const Navbar = () => {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="fixed" sx={{ top: 0, width: "100%" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Typography
+          {/* <Typography
             variant="h6"
             noWrap
             component="a"
@@ -103,8 +149,8 @@ const Navbar = () => {
               width={50}
               alt="Logo"
             />
-            {/* <div style={{ marginTop: "4px" }}>KRISHNA</div> */}
-          </Typography>
+            <div style={{ marginTop: "4px" }}>KRISHNA</div>
+          </Typography> */}
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
@@ -137,7 +183,9 @@ const Navbar = () => {
               {pages.map(
                 (page, i) =>
                   (isUserLoggedIn ||
-                    !["Products", "Upload"].includes(page)) && (
+                    !["Home", "Products", "Upload", "Admin"].includes(
+                      page
+                    )) && (
                     <MenuItem key={page} onClick={() => handleCloseNavMenu(i)}>
                       <Typography textAlign="center">{page}</Typography>
                     </MenuItem>
@@ -167,7 +215,8 @@ const Navbar = () => {
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map(
               (page, i) =>
-                (isUserLoggedIn || !["Products", "Upload"].includes(page)) && (
+                (isUserLoggedIn ||
+                  !["Home", "Products", "Upload"].includes(page)) && (
                   <Button
                     key={page}
                     onClick={() => handleCloseNavMenu(i)}
@@ -196,9 +245,13 @@ const Navbar = () => {
                 >
                   {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/3.jpg" /> */}
                   <MenuItem>
-                    <Typography textAlign="center" sx={{ fontSize: "20px" }}>
-                      {user.name.split(" ")[0]}
-                    </Typography>
+                    <div
+                      className="flex items-center mr-1"
+                      style={{ fontSize: "17px" }}
+                    >
+                      <AccountCircleIcon />
+                      <div className="ml-1">{user?.name?.split(" ")[0]}</div>
+                    </div>
                   </MenuItem>
                 </IconButton>
               </Tooltip>
@@ -225,9 +278,9 @@ const Navbar = () => {
                     sx={{ display: "flex", alignItems: "center" }}
                   >
                     {setting === "Profile" && (
-                      <AccountCircleIcon sx={{ mr: 2 }} />
+                      <AccountCircleIcon sx={{ mr: 1 }} />
                     )}
-                    {setting === "Logout" && <LogoutIcon sx={{ mr: 2 }} />}
+                    {setting === "Logout" && <LogoutIcon sx={{ mr: 1 }} />}
                     <Typography textAlign="center">{setting}</Typography>
                   </MenuItem>
                 ))}

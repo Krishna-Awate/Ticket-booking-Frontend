@@ -131,3 +131,37 @@ export const resendVerificationEmail = async (data) => {
     return null;
   }
 };
+
+export const getUser = async (token) => {
+  try {
+    const request = {
+      url: `${process.env.NEXT_PUBLIC_BACKEND_HOST}/user`,
+      method: "get",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const response = await axios(request);
+    return response.data;
+  } catch (error) {
+    let errorMessage = "Something went wrong!";
+    if (error.response) {
+      errorMessage = error.response.data.message;
+    } else if (error.request) {
+      errorMessage =
+        "No response from server. Please check your internet connection.";
+    } else {
+      errorMessage = error.message;
+    }
+
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: errorMessage,
+      // footer: "Please try again.",
+    });
+
+    return null;
+  }
+};

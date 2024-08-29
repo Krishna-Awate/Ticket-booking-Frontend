@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "../components/Navbar";
 import { StoreProvider } from "@/src/StoreProvider";
+import InactivityHandler from "../components/InactivityHandler";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,7 +23,8 @@ export default function RootLayout({
         <body className={inter.className}>
           <div>
             <Navbar />
-            {children}
+            <main style={{ paddingTop: "64px" }}> {children}</main>
+            <InactivityHandler />
           </div>
         </body>
       </html>
