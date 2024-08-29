@@ -30,13 +30,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ButtonWithLoader = ({ isButtonLoading, text, buttonColor }) => {
+const ButtonWithLoader = ({
+  isButtonLoading,
+  text,
+  buttonColor,
+  textSize,
+  padding,
+}) => {
   const classes = useStyles();
+  console.log('textSize',textSize);
   return (
     <ThemeProvider theme={theme}>
       <LoadingButton
         className={classes.button}
-        style={{ color: "white" }}
+        style={{
+          color: "white",
+          fontSize: textSize ? textSize : "",
+          padding: padding ? padding : "5px",
+        }}
         type=""
         variant="contained"
         color={buttonColor}
