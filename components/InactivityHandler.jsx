@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { userRoleUpdate } from "/src/slice/userSlice";
+import { userUpdate } from "/src/slice/userSlice";
 
 const InactivityHandler = ({ timeout = 300000 }) => {
   // default 5 minutes
@@ -19,6 +20,7 @@ const InactivityHandler = ({ timeout = 300000 }) => {
       timer = setTimeout(() => {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
+        dispatch(userUpdate(false));
         dispatch(userRoleUpdate(""));
         router.push("/auth/login");
       }, timeout);

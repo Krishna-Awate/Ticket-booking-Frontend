@@ -30,9 +30,7 @@ import { getUser } from "/services/user";
 const Navbar = () => {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
-  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
   const [user, setUser] = useState();
-  // const [userRole, setUserRole] = useState("");
 
   const dispatch = useDispatch();
   const router = useRouter();
@@ -61,11 +59,12 @@ const Navbar = () => {
       const getUserData = async () => {
         const token = localStorage.getItem("token");
         const userData = await getUser(token);
-        setIsUserLoggedIn(true);
         setUser(user);
+        dispatch(userUpdate(true));
         dispatch(userRoleUpdate(userData?.user?.role));
         if (!userData) {
-          setIsUserLoggedIn(false);
+          dispatch(userUpdate(false));
+          dispatch(userRoleUpdate(userData?.user?.role));
           localStorage.removeItem("token");
           localStorage.removeItem("user");
           router.push("/auth/login");
@@ -73,7 +72,7 @@ const Navbar = () => {
       };
       getUserData();
     }
-  }, [checkLoggedIn]);
+  }, [checkLoggedIn, router, dispatch]);
 
   console.log("here running");
 
@@ -109,8 +108,6 @@ const Navbar = () => {
     if (settings[i] === "Logout") {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
-      userRoleUpdate("");
-      setIsUserLoggedIn("");
       dispatch(userUpdate(false));
       dispatch(userRoleUpdate(""));
       router.push("/auth/login");
@@ -182,7 +179,7 @@ const Navbar = () => {
             >
               {pages.map(
                 (page, i) =>
-                  (isUserLoggedIn ||
+                  (checkLoggedIn ||
                     !["Home", "Products", "Upload", "Admin"].includes(
                       page
                     )) && (
@@ -215,7 +212,7 @@ const Navbar = () => {
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map(
               (page, i) =>
-                (isUserLoggedIn ||
+                (checkLoggedIn ||
                   !["Home", "Products", "Upload"].includes(page)) && (
                   <Button
                     key={page}
@@ -228,7 +225,7 @@ const Navbar = () => {
             )}
           </Box>
 
-          {isUserLoggedIn && (
+          {checkLoggedIn && (
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton
@@ -288,7 +285,7 @@ const Navbar = () => {
             </Box>
           )}
 
-          {!isUserLoggedIn && (
+          {!checkLoggedIn && (
             <Link href="/auth/login">
               <MenuItem>
                 <Typography textAlign="center">LOG IN</Typography>

@@ -3,7 +3,6 @@ const Swal = require("sweetalert2");
 
 export const getBazarData = async () => {
   try {
-    console.log("here 1");
     const request = {
       url: `${process.env.NEXT_PUBLIC_BACKEND_HOST}/data/bazar`,
       method: "get",

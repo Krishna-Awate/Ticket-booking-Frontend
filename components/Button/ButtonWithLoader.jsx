@@ -38,7 +38,6 @@ const ButtonWithLoader = ({
   padding,
 }) => {
   const classes = useStyles();
-  console.log('textSize',textSize);
   return (
     <ThemeProvider theme={theme}>
       <LoadingButton
